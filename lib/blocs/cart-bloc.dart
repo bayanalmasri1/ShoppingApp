@@ -8,27 +8,77 @@ class AddToCart extends CartEvent {
   AddToCart(this.product);
 }
 
-
 class RemoveFromCart extends CartEvent {
   final Product product;
   RemoveFromCart(this.product);
 }
 
-class CartState {
-  final List<Product> cartItems;
-  CartState(this.cartItems);
-
-  double get totalPrice => cartItems.fold(0, (sum, item) => sum + item.price);
-  int get itemCount => cartItems.length;
+class IncreaseQuantity extends CartEvent {
+  final Product product;
+  IncreaseQuantity(this.product);
 }
+
+class DecreaseQuantity extends CartEvent {
+  final Product product;
+  DecreaseQuantity(this.product);
+}
+class CartItem {
+  final Product product;
+  int quantity;
+
+  CartItem({required this.product, this.quantity = 1});
+}
+
+class CartState {
+  final List<CartItem> cartItems;
+
+  CartState(this.cartItems);
+double get totalPrice => double.parse(
+      cartItems.fold(0.0, (double sum, item) => sum + (item.product.price * item.quantity))
+      .toStringAsFixed(1));
+  
+  int get itemCount => cartItems.fold(0, (int sum, item) => sum + item.quantity);
+  }
+
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartState([])) {
     on<AddToCart>((event, emit) {
-      emit(CartState([...state.cartItems, event.product]));
+      // Check if the product is already in the cart
+      final existingItem = state.cartItems.firstWhere(
+        (item) => item.product.id == event.product.id,
+        orElse: () => CartItem(product: event.product),
+      );
+
+      if (state.cartItems.contains(existingItem)) {
+        // If product exists, increase its quantity
+        existingItem.quantity += 1;
+        emit(CartState(List.from(state.cartItems)));
+      } else {
+        // If it's a new product, add it to the cart
+        emit(CartState([...state.cartItems, CartItem(product: event.product)]));
+      }
     });
+
     on<RemoveFromCart>((event, emit) {
-      emit(CartState([...state.cartItems]..remove(event.product)));
+      // Remove the product from the cart
+      emit(CartState(state.cartItems.where((item) => item.product.id != event.product.id).toList()));
+    });
+
+    on<IncreaseQuantity>((event, emit) {
+      // Find the product and increase its quantity
+      final item = state.cartItems.firstWhere((item) => item.product.id == event.product.id);
+      item.quantity += 1;
+      emit(CartState(List.from(state.cartItems)));
+    });
+
+    on<DecreaseQuantity>((event, emit) {
+      // Find the product and decrease its quantity if greater than 1
+      final item = state.cartItems.firstWhere((item) => item.product.id == event.product.id);
+      if (item.quantity > 1) {
+        item.quantity -= 1;
+      }
+      emit(CartState(List.from(state.cartItems)));
     });
   }
 }

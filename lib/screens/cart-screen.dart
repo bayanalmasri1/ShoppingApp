@@ -21,7 +21,9 @@ class CartScreen extends StatelessWidget {
                   child: ListView.builder(
                       itemCount: state.cartItems.length,
                       itemBuilder: (context, index) {
-                        final product = state.cartItems[index];
+                        final cartItem = state.cartItems[index]; // CartItem
+                        final product =
+                            cartItem.product; // Product inside CartItem
                         return Container(
                             margin: EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 10),
@@ -31,16 +33,37 @@ class CartScreen extends StatelessWidget {
                                     Border.all(color: Colors.black, width: 2)),
                             child: ListTile(
                               title: Text(product.name),
-                              subtitle: Text('\$${product.price}'),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () {
-                                  BlocProvider.of<CartBloc>(context)
-                                      .add(RemoveFromCart(product));
-                                },
+                              subtitle: Text(
+                                  '\$${product.price} x ${cartItem.quantity}'),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () {
+                                      BlocProvider.of<CartBloc>(context)
+                                          .add(DecreaseQuantity(product));
+                                    },
+                                  ),
+                                  Text('${cartItem.quantity}'),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      BlocProvider.of<CartBloc>(context)
+                                          .add(IncreaseQuantity(product));
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      BlocProvider.of<CartBloc>(context)
+                                          .add(RemoveFromCart(product));
+                                    },
+                                  ),
+                                ],
                               ),
                             ));
                       })),
