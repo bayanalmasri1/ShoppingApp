@@ -22,6 +22,7 @@ class DecreaseQuantity extends CartEvent {
   final Product product;
   DecreaseQuantity(this.product);
 }
+
 class CartItem {
   final Product product;
   int quantity;
@@ -33,13 +34,15 @@ class CartState {
   final List<CartItem> cartItems;
 
   CartState(this.cartItems);
-double get totalPrice => double.parse(
-      cartItems.fold(0.0, (double sum, item) => sum + (item.product.price * item.quantity))
-      .toStringAsFixed(1));
-  
-  int get itemCount => cartItems.fold(0, (int sum, item) => sum + item.quantity);
-  }
 
+  double get totalPrice => double.parse(
+        cartItems
+            .fold(0.0, (double sum, item) => sum + (item.product.price * item.quantity))
+            .toStringAsFixed(1),
+      );
+
+  int get itemCount => cartItems.fold(0, (int sum, item) => sum + item.quantity);
+}
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartState([])) {
@@ -77,8 +80,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final item = state.cartItems.firstWhere((item) => item.product.id == event.product.id);
       if (item.quantity > 1) {
         item.quantity -= 1;
+        emit(CartState(List.from(state.cartItems)));
+      } else {
+        // If the quantity reaches 1 and user tries to decrease, remove the item from the cart
+        emit(CartState(state.cartItems.where((i) => i.product.id != event.product.id).toList()));
       }
-      emit(CartState(List.from(state.cartItems)));
     });
   }
 }

@@ -72,7 +72,7 @@ class ProductScreen extends StatelessWidget {
                               child: Text(product.name,
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold))),
-                          Padding(padding: EdgeInsets.all(8),child: Text('/${product.price}')),
+                          Padding(padding: EdgeInsets.all(8),child: Text('${product.price}')),
                           ButtonBar(
                             alignment: MainAxisAlignment.center,
                             children: [
