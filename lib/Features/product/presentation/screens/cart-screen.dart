@@ -1,4 +1,4 @@
-import 'package:application_store/blocs/cart-bloc.dart';
+import 'package:application_store/Features/product/presentation/blocs/cart-bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

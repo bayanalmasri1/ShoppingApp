@@ -1,8 +1,8 @@
-import 'package:application_store/blocs/cart-bloc.dart';
-import 'package:application_store/blocs/product-bloc.dart';
-import 'package:application_store/repository/product-api.dart';
-import 'package:application_store/screens/cart-screen.dart';
-import 'package:application_store/screens/product-screen.dart';
+import 'package:application_store/Features/product/presentation/blocs/cart-bloc.dart';
+import 'package:application_store/Features/product/presentation/blocs/product-bloc.dart';
+import 'package:application_store/Features/product/data/repository/product-api.dart';
+import 'package:application_store/Features/product/presentation/screens/cart-screen.dart';
+import 'package:application_store/Features/product/presentation/screens/product-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

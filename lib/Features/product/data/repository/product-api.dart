@@ -1,4 +1,4 @@
-import 'package:application_store/model/product-list.dart';
+import 'package:application_store/Features/product/domin/model/product-list.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

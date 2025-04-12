@@ -1,4 +1,4 @@
-import 'package:application_store/model/product-list.dart';
+import 'package:application_store/Features/product/domin/model/product-list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class CartEvent {}

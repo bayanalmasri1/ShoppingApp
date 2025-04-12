@@ -1,5 +1,5 @@
-import 'package:application_store/model/product-list.dart';
-import 'package:application_store/repository/product-api.dart';
+import 'package:application_store/Features/product/domin/model/product-list.dart';
+import 'package:application_store/Features/product/data/repository/product-api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class ProductEvent {}
